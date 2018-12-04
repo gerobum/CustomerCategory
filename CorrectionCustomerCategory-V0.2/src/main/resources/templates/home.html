@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V0.2 Avec th:include dans <head ... , le fragment <head>...</head> 
+    du fichier "fragments/common.html" devient le <head>...</head> de ce fichier.
+    -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>       
+        <!-- # V0.1 Pour que thymeleaf tienne compte de l'internationalisation, 
+        il suffit d'utiliser th:text="#{<CLE>}", où <CLE> est une clé du fichier
+        "messages.properties", dans tout noeud html qui affiche du texte.
+        Le texte sera celui dans la langue locale associé à cette clé.
+        Par exemple, <h1 ... ci-dessous affiche Bienvenue ! ou Welcome! selon
+        la localisation.
+        -->
+        <h1 th:text="#{BIENVENUE !}">Bienvenue !</h1>
+        <p ><span th:text="#{CLIQUEZ}">Cliquez</span><a th:href="@{/customer}" th:text="#{ICI}">ici</a><span th:text="#{POUR VOIR LES CLIENTS}"> pour voir les clients</span></p>
+        <!-- V0.2 Avec th:replace dans ce <div> le fragment de classe 'footer'
+        du fichier "fragments/common.html" est remplace le <div> lui-même.
+        -->
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>
+    </body>
+</html>

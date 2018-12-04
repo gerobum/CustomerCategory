@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V0.2 Avec th:include dans <head ... , le fragment <head>...</head> 
+    du fichier "fragments/common.html" devient le <head>...</head> de ce fichier.
+    -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>
+        <!-- V0.2 th:replace="..." est utilisé pour inclure un fragment, en 
+        l'occurrence le menu. Très utile si ce menu apparait dans différentes
+        pages. 
+        -->
+        <div th:replace="fragments/menu"></div>
+        <h1 th:text=#{Clients}>Clients</h1>
+        <ul>
+            <!-- V0.0 La liste d'items des clients est créée à l'aide de th:each -->
+            <!-- V0.0 qui parcourt les clients (la liste envoyée par le modèle) -->
+            <li th:each="customer : ${customers}">
+                <span th:text="${customer.name}"></span>
+                <a th:text="#{[Modifier]}" th:href="@{/customer/edit(id=${customer.id})}">[Modifier]</a>
+                <a th:text="#{[Supprimer]}" th:href="@{'/customer/delete/' + ${customer.id}}">[Supprimer]</a>
+            </li>
+        </ul>
+        <!-- V0.0 Un bouton pour ouvrir la page de création de clients -->
+        <a th:href="@{/customer/create}" th:text="#{CREER UN NOUVEAU CLIENT}">Créer un nouveau client</a>        
+        <!-- V0.2 Avec th:replace dans ce <div> le fragment de classe 'footer'
+        du fichier "fragments/common.html" est remplace le <div> lui-même.
+        -->
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>
+    </body>
+</html>
