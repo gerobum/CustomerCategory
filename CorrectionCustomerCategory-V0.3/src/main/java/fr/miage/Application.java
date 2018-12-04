@@ -15,6 +15,7 @@
 // #### V0.3 Utilisation de Bootstrap et js pour avoir une jolie interface.
 // #### V0.3 - Les fichiers js et Boostrap sont dans src/main/resources/static
 // #### V0.3 - Le dossier src/main/resources/static est déclaré ressources dans SpringWebConfig 
+// #### V0.3 - Les templates .html sont agrémentés de décorations bootstap
 package fr.miage;
 
 import fr.miage.config.SpringWebConfig;
