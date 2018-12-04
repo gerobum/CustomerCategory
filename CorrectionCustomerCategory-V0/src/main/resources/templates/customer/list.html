@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head/>
+    <body>
+        <h1>Clients</h1>
+        <ul>
+            <!-- V0.0 La liste d'items des clients est créée à l'aide de th:each -->
+            <!-- V0.0 qui parcourt les clients (la liste envoyée par le modèle) -->
+            <li th:each="customer : ${customers}">
+                <span th:text="${customer.name}"></span>
+                <a th:href="@{/customer/edit(id=${customer.id})}">[Modifier]</a>
+                <a th:href="@{'/customer/delete/' + ${customer.id}}">[Supprimer]</a>
+            </li>
+        </ul>
+        <!-- V0.0 Un bouton pour ouvrir la page de création de clients -->
+        <a th:href="@{/customer/create}">Créer un nouveau client</a>
+    </body>
+</html>
