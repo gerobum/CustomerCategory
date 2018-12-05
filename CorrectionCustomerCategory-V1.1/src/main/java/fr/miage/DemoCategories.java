@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Order(1)
 @Component
 public class DemoCategories implements CommandLineRunner {
-
+    // #### V1.1 Utilisation de slf4j pour faire du log
+    // #### V1.1 https://www.slf4j.org/manual.html
     private static final Logger LOGGER = LoggerFactory.getLogger(DemoCategories.class);
 
     @Autowired
