@@ -11,3 +11,4 @@ target/
 *.log
 *.out
 *.gz
+/CorrectionCustomerCategory-V1.2/nbproject/
