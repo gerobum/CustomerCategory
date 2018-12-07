@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V1.0 Il n'y a pratiquement rien de nouveau. Customer devient Category  -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>
+        <div class="container">
+            <div th:replace="fragments/menu"></div>
+            <h1 th:text=#{Categories}>Catégories</h1>
+            <!-- V1.0 
+            th:action="... précise l'url vers laquelle renvoit l'appui du 
+            bouton "submit". Comme ce fichier sert à la fois 
+            1. à la création (/category/create) et 
+            2. à l'édition (/category/edit)
+            Le formulaire fait un "retour à l'envoyeur". C'est-à-dire que si
+            on y vient depuis n'importe quelle URL par HTTP/GET, "submit" fait
+            la requête HTTP/POST sur cette même URL.
+            -->
+            <!-- V1.0 
+            th:object="${category}" indique que le formulaire manipule un objet
+            passer à travers le modèle dont la clé est "category"
+
+            Dans le reste du formulaire, th:field="*{xxx}" fait référence au
+            champ xxx de cet objet.
+            -->
+            <form action="#" th:object="${category}" method="post" role="form">
+                <!-- V1.0 Le formulaire sert à l'édition comme à la création.
+                Dans le cas de la création, le champ id n'est pas indispensable
+                Puisqu'il est nul et sera calculé automatiquement au moment de
+                l'enregistrement du client dans la BDD.
+                Mais pour l'édition, le champ id est déterminé à partir du nom
+                choisi dans le formulaire. Or, (bizarrement), s'il est pas 
+                traité par le formulaire, il sera renvoyé nul au "submit". 
+                Il faut donc y faire référence mais sans le montrer, d'où le
+                champ caché suivant.
+                -->
+                <input type="hidden" th:field="*{id}"/>
+                <label th:text="#{Nom}" for="name">Nom</label>
+                <!-- V1.0 Le champ "name" de l'objet "category" est 
+                directement affecté par la saisie dans l'input suivant.
+                -->      
+                <!-- V1.0 Le message dans th:placeholder est différent de celui
+                pour les clients. Car une catégorie possède un nom d'un seul caractère.
+                -->
+                <input id="name" type="text" th:field="*{name}" th:placeholder="#{1a1}"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
+                <button th:text="#{Valider}" type="submit" class="btn btn-success">Valider</button>
+                <a th:text="#{Fermer}" th:href="@{/category}">Fermer</a>
+            </form>  
+        </div>
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>
+        <div th:replace="fragments/common :: [//div[@id='scripts']]"></div>	
+    </body>
+</html>
