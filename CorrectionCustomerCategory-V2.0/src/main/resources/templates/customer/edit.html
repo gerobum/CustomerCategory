@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V0.2 Avec th:include dans <head ... , le fragment <head>...</head> 
+    du fichier "fragments/common.html" devient le <head>...</head> de ce fichier.
+    -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>
+        <!-- V0.2 th:replace="..." est utilisé pour inclure un fragment, en 
+        l'occurrence le menu. Très utile si ce menu apparait dans différentes
+        pages. 
+        -->
+        <div class="container"><!-- V0.3 -->
+            <div th:replace="fragments/menu"></div>
+            <h1 th:text=#{Clients}>Clients</h1>
+            <!-- V0.0 
+            th:action="... précise l'url vers laquelle renvoit l'appui du 
+            bouton "submit". Comme ce fichier sert à la fois 
+            1. à la création (/customer/create) et 
+            2. à l'édition (/customer/edit)
+            Le formulaire fait un "retour à l'envoyeur". C'est-à-dire que si
+            on y vient depuis n'importe quelle URL par HTTP/GET, "submit" fait
+            la requête HTTP/POST sur cette même URL.
+            -->
+            <!-- V0.0 
+            th:object="${customer}" indique que le formulaire manipule un objet
+            passer à travers le modèle dont la clé est "customer"
+
+            Dans le reste du formulaire, th:field="*{xxx}" fait référence au
+            champ xxx de cet objet.
+            -->
+            <form action="#" th:object="${customer}" method="post" role="form">
+                <!-- V0.0 Le formulaire sert à l'édition comme à la création.
+                Dans le cas de la création, le champ id n'est pas indispensable
+                Puisqu'il est nul et sera calculé automatiquement au moment de
+                l'enregistrement du client dans la BDD.
+                Mais pour l'édition, le champ id est déterminé à partir du nom
+                choisi dans le formulaire. Or, (bizarrement), s'il est pas 
+                traité par le formulaire, il sera renvoyé nul au "submit". 
+                Il faut donc y faire référence mais sans le montrer, d'où le
+                champ caché suivant.
+                -->
+                <input type="hidden" th:field="*{id}"/>
+                <label th:text="#{Nom}" for="name">Nom</label>
+                <!-- V0.0 Le champ "name" de l'objet "customer" est 
+                directement affecté par la saisie dans l'input suivant.
+                -->      
+                <!-- # V0.1 Pour que thymeleaf tienne compte de l'internationalisation, 
+                il suffit d'utiliser th:text="#{<CLE>}", où <CLE> est une clé du fichier
+                "messages.properties", dans tout noeud html qui affiche du texte.
+                Le texte sera celui dans la langue locale associé à cette clé.
+
+                Il est possible aussi d'utiliser th:placeholder="#{2a30}" comme ci-dessous.
+                -->
+                <input id="name" type="text" th:field="*{name}" th:placeholder="#{2a30}"/>
+                <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
+                
+                <!-- V1.4 Le formulaire affiche dans une boite à liste toutes
+                les catégories existantes. Si le client géré par le formulaire (voir th:object="${customer}")
+                appartient à une catégorie, elle sera selectionnée. -->
+                <p>
+                <label th:text="#{Categorie}" for="category">Nom</label>
+                <!-- La sélection d'une catégorie dans la liste affecte le champ 
+                category du client (parce que th:field="*{category}")
+                -->
+                <select th:field="*{category}" id="category">
+                    <option th:value="null" th:text="#{Vide}">Vide</option>
+                    <!-- V1.4 Pour chaque catégorie de categories (th:each="category : ${categories}"), 
+                              afficher une option
+                                - qui montre le nom d'une catégorie th:text="${category.name}
+                                - qui permet de modifier le champ category de customer  
+                                  (th:value="${category.id}") lorsqu'un option est sélectionnée.
+                    -->
+                    <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                </select>
+                </p>
+                <button th:text="#{Valider}" type="submit" class="btn btn-success">Valider</button>
+                <a th:text="#{Fermer}" th:href="@{/customer}">Fermer</a>
+            </form>  
+        </div>
+        <!-- V0.2 Avec th:replace dans ce <div> le fragment de classe 'footer'
+        du fichier "fragments/common.html" est remplace le <div> lui-même.
+        -->
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>
+        <!-- V0.3 -->
+        <div th:replace="fragments/common :: [//div[@id='scripts']]"></div>	
+    </body>
+</html>
