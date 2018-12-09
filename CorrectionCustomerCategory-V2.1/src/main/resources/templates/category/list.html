@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V1.0 Il n'y a pratiquement rien de nouveau. Categorie devient Category  -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>
+        <div th:replace="fragments/menu"></div>
+               
+        <div class="container">
+            <h1 th:text=#{Categories}>Catégories</h1>
+            <ul>
+                <!-- V1.0 La liste d'items des catégories est créée à l'aide de th:each -->
+                <!-- V1.0 qui parcourt les catégories (la liste envoyée par le modèle) -->
+                <li th:each="category : ${categories}">
+                    <span th:text="${category.name}"></span>                   
+                    <a th:href="@{/category/edit(id=${category.id})}"><i class="fa fa-pencil"></i></a>                
+                    <a  th:href="@{'/category/delete/' + ${category.id}}"><i class="fa fa-remove"></i></a>
+                </li>
+            </ul>
+            <!-- V1.0 Un bouton pour ouvrir la page de création de catégories -->
+            <a th:href="@{/category/create}" th:text="#{CREER UNE NOUVELLE CATEGORIE}" class="btn btn-success">Créer une nouvelle catégorie</a>        
+        </div>
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>        
+        <div th:replace="fragments/common :: [//div[@id='scripts']]"></div>	
+    </body>
+</html>
+
+    
