@@ -34,8 +34,10 @@ public class Category implements Serializable {
     private String name;
     
     // #### V1.4 Une catégorie peut catégoriser plusieurs clients @OneToMany
-    // #### V1.4 C'est une relation bidirectionnelle. Category est la table 
-    // #### V1.4 esclave. C'est-à-dire qu'elle contient la clé étrangère (mappedBy = "category")
+    // #### V1.4 C'est une relation bidirectionnelle. 
+    // #### V1.4 Le paramètre (mappedBy = "category") indique que Category est 
+    // #### V1.4 la table esclave. C'est-à-dire que c'est la table Customer qui
+    // #### V1.4 contient une clé étrangère "id_catégorie".
     @OneToMany(mappedBy = "category")
     private List<Customer> customers;
 
