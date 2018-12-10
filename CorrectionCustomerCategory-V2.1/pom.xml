@@ -65,11 +65,22 @@
     <build>
         <finalName>${project.name}</finalName>
         <!-- V2.1 -->
-        <resources>           
+        <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>${project.basedir}/src/main/resources</directory>
                 <!-- filtering=true to replace variables in properties files -->
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>static/theme/font-awesome/fonts/**</exclude>
+                </excludes>
+            </resource>
+            <!-- when filtering resources, spring boot do not publish correctly font files from static dir (font-awesome) -->
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>static/theme/font-awesome/fonts/**</include>
+                </includes>
             </resource>
         </resources>
 
