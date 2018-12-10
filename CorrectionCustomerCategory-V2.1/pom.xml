@@ -19,7 +19,11 @@
     </properties>
     
     
-    <!-- V2.1 Création de 2 profils : dev et prod -->
+    <!-- V2.1 Création de 2 profils : dev et prod 
+    Remarque : à partir du moment où un profil est ajouté. Netbeans en tient
+               compte. En dessous de la barre de menu, une boîte à liste propose
+               le choix des profils déclarés ici.
+    -->
     <profiles>
         <profile>
             <id>dev</id>
