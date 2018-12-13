@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <!-- V0.2 Avec th:include dans <head ... , le fragment <head>...</head> 
+    du fichier "fragments/common.html" devient le <head>...</head> de ce fichier.
+    -->
+    <head th:include="fragments/common :: [//head]" />
+    <body>
+        <!-- V0.2 th:replace="..." est utilisé pour inclure un fragment, en 
+        l'occurrence le menu. Très utile si ce menu apparait dans différentes
+        pages. 
+        -->
+        <div th:replace="fragments/menu"></div>
+               
+        <div class="container"><!-- V0.3 -->
+            <!-- V2.0 Un titre conditionnel selon que l'on souhaite afficher 
+            (1) tous les clients ou (2) tous les clients d'une catégorie.
+            Le choix se fait sur la variable ${category}
+            (1) Si absente
+            (2) Sinon
+            -->
+            <div th:switch="${category}">
+            <h1 th:case="null" th:text=#{Clients}>Clients</h1>
+            <!-- V2.0 Utilisation d'un message international avec un paramètre -->
+            <h1 th:case="*" th:text=#{ClientsDeCategory(${category})}>Autre</h1>
+            </div>
+            <ul>
+                <!-- V0.0 La liste d'items des clients est créée à l'aide de th:each -->
+                <!-- V0.0 qui parcourt les clients (la liste envoyée par le modèle) -->
+                <li th:each="customer : ${customers}">
+                     <!-- V1.5 En remplaçant th:text="${customer.name}" par th:text="${customer}"  -->
+                     <!-- V1.5 C'est toString() qui sera affiché.  -->
+                    <span th:text="${customer}"></span>       
+                    <!-- V0.3 Remplacement de th:text="#{[Modifier]}" par <i class="fa fa-pencil"></i>-->              
+                    <a th:href="@{/customer/edit(id=${customer.id})}"><i class="fa fa-pencil"><!-- V0.3 --></i></a>    
+                    <!-- V0.3 Remplacement de th:text="#{[Supprimer]}" par <i class="fa fa-remove"></i>-->             
+                    <a  th:href="@{'/customer/delete/' + ${customer.id}}"><i class="fa fa-remove"><!-- V0.3 --></i></a>
+                </li>
+            </ul>
+            <!-- V0.0 Un bouton pour ouvrir la page de création de clients -->
+            <a th:href="@{/customer/create}" th:text="#{CREER UN NOUVEAU CLIENT}" class="btn btn-success"<!-- V0.3 -->>Créer un nouveau client</a>        
+        </div>
+        <!-- V0.2 Avec th:replace dans ce <div> le fragment de classe 'footer'
+        du fichier "fragments/common.html" est remplace le <div> lui-même.
+        -->
+        <div th:replace="fragments/common :: [//div[@class='footer']]"></div>
+        <!-- V0.3 -->
+        <div th:replace="fragments/common :: [//div[@id='scripts']]"></div>	
+    </body>
+</html>
+
+    
