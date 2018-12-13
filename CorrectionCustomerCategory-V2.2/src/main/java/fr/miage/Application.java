@@ -50,14 +50,16 @@
 // #### V2.0 Par exemple /customer/X affiche les clients de catégorie X.
 // #### V2.0 Si X n'existe pas, la liste est vide.
 
-// #### V2.1 Création de deux profils : 
-// #### V2.1    1. Un profil "dev", dédié au développement, pourvu d'une BDD H2 
-// #### V2.1       (en mémoire) et qui réalise des tests unitaires
-// #### V2.1    2. Un profil "prod", dédié à la production, pourvu d'une BDD  
-// #### V2.1       mysql et qui ne s'encombre pas des dépendances liées à JUnit 
-// #### V2.1
-// #### V2.1 Remarque : le changement ne se fait pas à chaud. Il faut faire un
-// #### V2.1 build pour le valider.
+// #### V2.1 Mise en place d'une BDD MySql plutôt que H2.
+
+// #### V2.2 Création de deux profils : 
+// #### V2.2    1. Un profil "dev", dédié au développement, pourvu d'une BDD H2 
+// #### V2.2       (en mémoire) et qui réalise des tests unitaires
+// #### V2.2    2. Un profil "prod", dédié à la production, pourvu d'une BDD  
+// #### V2.2       mysql et qui ne s'encombre pas des dépendances liées à JUnit 
+// #### V2.2
+// #### V2.2 Remarque : le changement ne se fait pas à chaud. Il faut faire un
+// #### V2.2 build pour le valider.
 package fr.miage;
 
 import org.springframework.boot.SpringApplication;
