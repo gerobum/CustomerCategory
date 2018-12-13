@@ -2,24 +2,21 @@
 // #### V0.2 sont ajoutés pour intercepter les changements.
 package fr.miage.config;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import java.util.Locale;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan(basePackages = {"fr.miage.web"})
-@EnableWebMvc
+// #### V0.0 @SpringBootApplication est un raccourci pour 
+// #### V0.0 @EnableAutoConfiguration
+// #### V0.0 @ComponentScan
+// #### V0.0 @Configuration
+@SpringBootApplication(scanBasePackages = {"fr.miage.web"})
 public class SpringWebConfig implements WebMvcConfigurer {
 
     // #### V0.2 Demande à Spring d'intercepter les urls 
