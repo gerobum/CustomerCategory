@@ -50,18 +50,22 @@
 // #### V2.0 Par exemple /customer/X affiche les clients de catégorie X.
 // #### V2.0 Si X n'existe pas, la liste est vide.
 
-// #### V2.1 Création de deux profils : 
-// #### V2.1    1. Un profil "dev", dédié au développement, pourvu d'une BDD H2 
-// #### V2.1       (en mémoire) et qui réalise des tests unitaires
-// #### V2.1    2. Un profil "prod", dédié à la production, pourvu d'une BDD  
-// #### V2.1       mysql et qui ne s'encombre pas des dépendances liées à JUnit 
-// #### V2.1
-// #### V2.1 Remarque : le changement ne se fait pas à chaud. Il faut faire un
-// #### V2.1 build pour le valider.
+// #### V2.1 Mise en place d'une BDD MySql plutôt que H2.
 
-// #### V2.2 Création des entités Person et Role. 
-// #### V2.2 Une personne possède un nom, un prénom et est associé à 0 ou 1 role.  
-// #### V2.2 Un role un nom et est associé à 0, 1 ou plusieurs. 
+// #### V2.2 Création de deux profils : 
+// #### V2.2    1. Un profil "dev", dédié au développement, pourvu d'une BDD H2 
+// #### V2.2       (en mémoire) et qui réalise des tests unitaires
+// #### V2.2    2. Un profil "prod", dédié à la production, pourvu d'une BDD  
+// #### V2.2       mysql et qui ne s'encombre pas des dépendances liées à JUnit 
+// #### V2.2
+// #### V2.2 Remarque : le changement ne se fait pas à chaud. Il faut faire un
+// #### V2.2 build pour le valider.
+
+// #### V2.3 Gestion de certaines erreurs provoquées certaines tentatives de
+// #### V2.3 modifications dans la BDD comme la création d'un client dont le nom 
+// #### V2.3 existe déjà. 
+
+// #### V3.0 Cette version ne différence de la V2.3 que par son port, 7373 au lieu de 7272
 package fr.miage;
 
 import org.springframework.boot.SpringApplication;

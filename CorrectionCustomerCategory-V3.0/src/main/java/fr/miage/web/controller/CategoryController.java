@@ -2,19 +2,25 @@ package fr.miage.web.controller;
 
 import fr.miage.core.entity.Category;
 import fr.miage.core.service.CategoryService;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 // #### V1.0 Indicates that an annotated class is a "Controller" 
 // #### V1.0 (e.g. a web controller).
@@ -22,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 // #### V1.0 for implementation classes to be autodetected through classpath 
 // #### V1.0 scanning. It is typically used in combination with annotated 
 // #### V1.0 handler methods based on the RequestMapping annotation.
-
 // #### V1.0 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/stereotype/Controller.html
 @Controller
 // #### V1.0 Toutes les méthodes de cette classe annotées @RequestMapping ou
@@ -31,10 +36,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 // #### V1.0 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/RequestMapping.html
 @RequestMapping("/category")
 public class CategoryController {
-    
+
 // #### V1.1 LOGGER Pour faire du Log (qui s'applique à cette classe) 
     private final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
-
 
 // #### V1.0 https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/beans/factory/annotation/Autowired.html
 // #### V1.0 Injection de dépendance (en l'occurrence CategoryServiceImpl)
@@ -122,8 +126,30 @@ public class CategoryController {
 // #### V1.0 src/main/resources/templates/category/edit.html est invoqué
             return "category/edit";
         }
+        // #### V2.3 Certaines erreurs sont évitées grâce à @Valid et BindingResult,
+        // #### V2.3 Mais pas toutes. D'autres erreurs, impossible à contrôler
+        // #### V2.3 dans le formulaire peuvent survenir. On peut les gérer ici
+        // #### V2.3 dans un "try catch".
+        try {
+            categoryService.save(category);
+        } catch (DataIntegrityViolationException ex) {
+            // #### V2.3 Si une exception survient ici, c'est, a priori, parce        
+            // #### V2.3 qu'on a essayé de créer une catégorie dont le nom existe      
+            // #### V2.3 déjà et la contrainte d'unicité du champ name de la   
+            // #### V2.3 table Category a été violée. 
+
+            // #### V2.3 On retourne au formulaire la clé qui correspond à
+            // #### V2.3 au message de cette erreur dans messages.properties.
+            br.rejectValue("name", "error.category.name.unique");
+            return "category/edit";
+        } catch (Exception ex) {
+            // #### V2.3 Si une autre exception survient ici, c'est une erreur             
+            // #### V2.3 inattendue. On retourne au formulaire la clé qui
+            // #### V2.3 correspond à un message plus général.
+            br.rejectValue("name", "error.creating.category");
+            return "category/edit";
+        }
 // #### V1.0 Si tout s'est bien passé, la client est enregistré dans la BDD.
-        categoryService.save(category);
 
 // #### V1.0 "redirect:" indique à Spring de faire une redirection, en d'autres
 // #### V1.0 termes, ça revient à une requête HTTP/GET sur /category
@@ -148,7 +174,29 @@ public class CategoryController {
 // #### V1.0    - pour la création en l'absence d'identifiant (dans ce cas, 
 // #### V1.0      il calculé automatiquement)
 // #### V1.0    - pour la modification avec un identifiant.
-        categoryService.save(category);
+        // #### V2.3 Certaines erreurs sont évitées grâce à @Valid et BindingResult,
+        // #### V2.3 Mais pas toutes. D'autres erreurs, impossible à contrôler
+        // #### V2.3 dans le formulaire peuvent survenir. On peut les gérer ici
+        // #### V2.3 dans un "try catch".
+        try {
+            categoryService.save(category);
+        } catch (DataIntegrityViolationException ex) {
+            // #### V2.3 Si une exception survient ici, c'est, a priori, parce        
+            // #### V2.3 qu'on a essayé de créer une catégorie dont le nom existe      
+            // #### V2.3 déjà et la contrainte d'unicité du champ name de la   
+            // #### V2.3 table Category a été violée. 
+
+            // #### V2.3 On retourne au formulaire la clé qui correspond à
+            // #### V2.3 au message de cette erreur dans messages.properties.
+            br.rejectValue("name", "error.category.name.unique");
+            return "category/edit";
+        } catch (Exception ex) {
+            // #### V2.3 Si une autre exception survient ici, c'est une erreur             
+            // #### V2.3 inattendue. On retourne au formulaire la clé qui
+            // #### V2.3 correspond à un message plus général.
+            br.rejectValue("name", "error.updating.category");
+            return "category/edit";
+        }
         return "redirect:/category";
     }
 
@@ -159,8 +207,36 @@ public class CategoryController {
     @GetMapping("/delete/{id}")
 // #### V1.0 Une autre façon de passer des arguments. Elle est précisée grâce à
 // #### V1.0 @PathVariable("id") où "id" correspond à {id}
-    public String delete(@PathVariable("id") Long id) {
-        categoryService.delete(id);
+    public String delete(@PathVariable("id") Long id, Model model) {
+        // #### V2.3 Il est impossible de supprimer une catégorie tant qu'un client
+        // #### V2.3 y est associé. Mais il est difficile de le vérifier dans le 
+        // #### V2.3 formulaire. C'est fait ici, en attrapant les éventuelles
+        // #### V2.3 exceptions. 
+        try {
+            categoryService.delete(id);
+        } catch (DataIntegrityViolationException ex) {
+            model.addAttribute("categories", categoryService.findAll());
+            model.addAttribute("error", "error.category.has.customers");
+            return "category/list";
+
+        } catch (Exception ex) {
+            model.addAttribute("categories", categoryService.findAll());
+            model.addAttribute("error", "error.deleting.category");
+            return "category/list";
+        }
         return "redirect:/category";
+    }
+
+    // #### V2.3 Même en l'absence de ce controller, 
+    // #### V2.3 si le template error.html existe
+    // #### V2.3 alors Spring l'ouvre en cas d'erreur.
+    // #### V2.3 Mais ce contrôleur peut servir à ajouter de l'information,
+    // #### V2.3 Comme par exemple, ici, l'exception elle-même.
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String constraintViolationException(HttpServletRequest req, Model model, Exception ex) {
+        model.addAttribute("exception", ex);
+        model.addAttribute("url", req.getRequestURL());
+        return "errors/error";
     }
 }

@@ -11,17 +11,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-// #### V1.1 Demo est une implémentation de CommandLineRunner qui indique que
-// #### V1.1 c'est un Bean qui doit être exécuté à son lancement.
-// #### V1.1 Plusieurs CommandLineRunner peuvent coexister. Si un ordre 
-// #### V1.1 d'exécution est nécessaire, il peut être indiqué par @Order
+// #### V1.2 DemoCategories est une implémentation de CommandLineRunner qui
+// #### V1.2 indique que c'est un Bean qui doit être exécuté à son lancement.
+// #### V1.2 Plusieurs CommandLineRunner peuvent coexister. Si un ordre 
+// #### V1.2 d'exécution est nécessaire, il peut être indiqué par @Order
 @Order(1)
 @Component 
-// #### V2.1 Le chargement au démarrage de quelques exemples de catégories dans
-// #### V2.1 la BDD n'existe (heureusement) qu'en mode développement ("dev").
-// #### V2.1 Ce bean ne sera instancié qu'en mode (profil) dev.
-// #### V2.1 Remarque: on aurait pu écrire @Profile("!prod") pour dire que 
-// #### V2.1 Ce bean sera instancié si on n'est pas en mode prod.
+// #### V2.2 Le chargement au démarrage de quelques exemples de catégories dans
+// #### V2.2 la BDD n'existe (heureusement) qu'en mode développement ("dev").
+// #### V2.2 Ce bean ne sera instancié qu'en mode (profil) dev.
+// #### V2.2 Remarque: on aurait pu écrire @Profile("!prod") pour dire que 
+// #### V2.2 Ce bean sera instancié si on n'est pas en mode prod.
 @Profile("dev")
 public class DemoCategories implements CommandLineRunner {
     // #### V1.1 Utilisation de slf4j pour faire du log

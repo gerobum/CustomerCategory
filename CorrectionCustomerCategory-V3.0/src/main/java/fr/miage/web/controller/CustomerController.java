@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -146,7 +147,30 @@ public class CustomerController {
             return "customer/edit";
         }
 // #### V0.0 Si tout s'est bien passé, la client est enregistré dans la BDD.
-        customerService.save(customer);
+        
+        // #### V2.3 Certaines erreurs sont évitées grâce à @Valid et BindingResult,
+        // #### V2.3 Mais pas toutes. D'autres erreurs, impossible à contrôler
+        // #### V2.3 dans le formulaire peuvent survenir. On peut les gérer ici
+        // #### V2.3 dans un "try catch".
+        try {
+            customerService.save(customer);
+        } catch (DataIntegrityViolationException ex) {
+            // #### V2.3 Si une exception survient ici, c'est, a priori, parce        
+            // #### V2.3 qu'on a essayé de créer une catégorie dont le nom existe      
+            // #### V2.3 déjà et la contrainte d'unicité du champ name de la   
+            // #### V2.3 table Category a été violée. 
+
+            // #### V2.3 On retourne au formulaire la clé qui correspond à
+            // #### V2.3 au message de cette erreur dans messages.properties.
+            br.rejectValue("name", "error.customer.name.unique");
+            return "customer/edit";
+        } catch (Exception ex) {
+            // #### V2.3 Si une autre exception survient ici, c'est une erreur             
+            // #### V2.3 inattendue. On retourne au formulaire la clé qui
+            // #### V2.3 correspond à un message plus général.
+            br.rejectValue("name", "error.creating.customer");
+            return "customer/edit";
+        }
 
 // #### V0.0 "redirect:" indique à Spring de faire une redirection, en d'autres
 // #### V0.0 termes, ça revient à une requête HTTP/GET sur /customer
@@ -177,7 +201,29 @@ public class CustomerController {
 // #### V0.0    - pour la création en l'absence d'identifiant (dans ce cas, 
 // #### V0.0      il calculé automatiquement)
 // #### V0.0    - pour la modification avec un identifiant.
-        customerService.save(customer);
+        // #### V2.3 Certaines erreurs sont évitées grâce à @Valid et BindingResult,
+        // #### V2.3 Mais pas toutes. D'autres erreurs, impossible à contrôler
+        // #### V2.3 dans le formulaire peuvent survenir. On peut les gérer ici
+        // #### V2.3 dans un "try catch".
+        try {
+            customerService.save(customer);
+        } catch (DataIntegrityViolationException ex) {
+            // #### V2.3 Si une exception survient ici, c'est, a priori, parce        
+            // #### V2.3 qu'on a essayé de créer une catégorie dont le nom existe      
+            // #### V2.3 déjà et la contrainte d'unicité du champ name de la   
+            // #### V2.3 table Category a été violée. 
+
+            // #### V2.3 On retourne au formulaire la clé qui correspond à
+            // #### V2.3 au message de cette erreur dans messages.properties.
+            br.rejectValue("name", "error.customer.name.unique");
+            return "customer/edit";
+        } catch (Exception ex) {
+            // #### V2.3 Si une autre exception survient ici, c'est une erreur             
+            // #### V2.3 inattendue. On retourne au formulaire la clé qui
+            // #### V2.3 correspond à un message plus général.
+            br.rejectValue("name", "error.updating.customer");
+            return "customer/edit";
+        }
         return "redirect:/customer";
     }
 

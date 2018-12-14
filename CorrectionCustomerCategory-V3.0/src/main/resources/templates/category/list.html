@@ -16,6 +16,14 @@
                     <a  th:href="@{'/category/delete/' + ${category.id}}"><i class="fa fa-remove"></i></a>
                 </li>
             </ul>
+        <!-- V2.3 Des actions sont possibles sur ce formulaire, comme supprimer
+        ou mettre à jour une catégorie. Mais des erreurs peuvent survenir, par
+        exemple la suppression d'une catégorie associée à un client est impossible.
+        Sa tentative engendre une exception. C'est pourquoi un message d'erreur
+        (error-msg) est possible. Il est traité s'il existe. 
+        th:text="#{${error-msg}
+        -->
+        <p th:if="${error}" th:text="#{${error}}">ERROR</p>
             <!-- V1.0 Un bouton pour ouvrir la page de création de catégories -->
             <a th:href="@{/category/create}" th:text="#{CREER UNE NOUVELLE CATEGORIE}" class="btn btn-success">Créer une nouvelle catégorie</a>        
         </div>

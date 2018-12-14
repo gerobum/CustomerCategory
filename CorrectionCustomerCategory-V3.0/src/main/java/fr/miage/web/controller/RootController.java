@@ -1,9 +1,14 @@
 
 package fr.miage.web.controller;
 
+import javax.validation.ConstraintViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 // #### V0.0 RootController permet de gérer les appels à l'url /
